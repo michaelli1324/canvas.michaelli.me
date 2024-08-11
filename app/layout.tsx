@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Collaborative Canvas",
+  title: "canvas.michaelli.me",
   description: "Create and share art on a real-time collaborative canvas",
   keywords: [
     "collaborative",
@@ -19,11 +19,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Collaborative Canvas",
     description: "Create and share art on a real-time collaborative canvas",
-    url: "https://place.michaelli.me",
+    url: "https://canvas.michaelli.me",
     siteName: "Collaborative Canvas",
     images: [
       {
-        url: "https://place.michaelli.me/og-image.png",
+        url: "https://canvas.michaelli.me/og-image.png",
         width: 1200,
         height: 630,
       },
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Collaborative Canvas",
     description: "Create and share art on a real-time collaborative canvas",
-    images: ["https://place.michaelli.me/og-image.png"],
+    images: ["https://canvas.michaelli.me/og-image.png"],
   },
 };
 
