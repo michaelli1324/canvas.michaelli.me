@@ -19,19 +19,24 @@ export interface PixelGridRef {
 }
 
 const PixelGrid = forwardRef<PixelGridRef, {}>(function PixelGrid(_props, ref) {
-  const { grid, handlePixelClick, isPipetteActive, setZoomLevel } = usePlace();
+  const {
+    grid,
+    handlePixelClick,
+    isPipetteActive,
+    setZoomLevel,
+    setHoveredPixel,
+  } = usePlace();
   const gridRef = useRef<HTMLDivElement>(null);
   const panzoomRef = useRef<PanzoomObject | null>(null);
 
   useEffect(() => {
-    if (gridRef.current) {
-      panzoomRef.current = Panzoom(gridRef.current, {
+    const element = gridRef.current;
+    if (element) {
+      panzoomRef.current = Panzoom(element, {
         maxScale: 4,
         minScale: 1,
         contain: "outside",
       });
-
-      const element = gridRef.current;
 
       const handleZoom = () => {
         const zoom = panzoomRef.current?.getScale() ?? 1;
@@ -55,8 +60,22 @@ const PixelGrid = forwardRef<PixelGridRef, {}>(function PixelGrid(_props, ref) {
     reset: () => panzoomRef.current?.reset(),
   }));
 
+  const handlePixelHover = (x: number, y: number) => {
+    setHoveredPixel({ x, y, color: grid[y][x] });
+  };
+
+  const handlePixelLeave = () => {
+    setHoveredPixel(null);
+  };
+
   return (
-    <div className='pixel-grid-container'>
+    <div
+      className='pixel-grid-container'
+      onClickCapture={(e) => {
+        // Dispatch event to close color picker
+        document.dispatchEvent(new MouseEvent("mousedown"));
+      }}
+    >
       <div
         ref={gridRef}
         className='pixel-grid'
@@ -71,6 +90,8 @@ const PixelGrid = forwardRef<PixelGridRef, {}>(function PixelGrid(_props, ref) {
               key={`${x}-${y}`}
               color={color}
               onClick={() => handlePixelClick(x, y)}
+              onMouseEnter={() => handlePixelHover(x, y)}
+              onMouseLeave={handlePixelLeave}
               isPipetteActive={isPipetteActive}
             />
           ))

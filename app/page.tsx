@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import PixelGrid, { PixelGridRef } from "./components/PixelGrid";
-import ColorPicker from "./components/ColorPicker";
+import BottomMenu from "./components/BottomMenu";
 import ZoomControls from "./components/ZoomControls";
 import LoadingScreen from "./components/LoadingScreen";
 import { PlaceProvider, usePlace } from "./contexts/PlaceContext";
@@ -23,7 +23,7 @@ const PixelApp: React.FC = () => {
   return (
     <div className='full-page-container'>
       <PixelGrid ref={pixelGridRef} />
-      <ColorPicker />
+      <BottomMenu />
       <ZoomControls
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}

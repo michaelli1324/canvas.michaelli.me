@@ -1,13 +1,19 @@
 import React, { memo } from "react";
 
-const Pixel = ({
-  color,
-  onClick,
-  isPipetteActive,
-}: {
+interface PixelProps {
   color: string;
   onClick: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
   isPipetteActive: boolean;
+}
+
+const Pixel: React.FC<PixelProps> = ({
+  color,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  isPipetteActive,
 }) => (
   <div
     className='pixel'
@@ -16,6 +22,8 @@ const Pixel = ({
       cursor: isPipetteActive ? "copy" : "pointer",
     }}
     onClick={onClick}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
   />
 );
 

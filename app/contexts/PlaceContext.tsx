@@ -15,6 +15,11 @@ type PlaceContextType = {
   isLoading: boolean;
   cursorPosition: { x: number; y: number };
   isMouseOnScreen: boolean;
+  hoveredPixel: { x: number; y: number; color: string } | null;
+  setHoveredPixel: (
+    pixel: { x: number; y: number; color: string } | null
+  ) => void;
+  deactivatePipette: () => void;
 };
 
 const PlaceContext = createContext<PlaceContextType>({
@@ -30,6 +35,9 @@ const PlaceContext = createContext<PlaceContextType>({
   isLoading: true,
   cursorPosition: { x: -1, y: -1 },
   isMouseOnScreen: false,
+  hoveredPixel: null,
+  setHoveredPixel: () => {},
+  deactivatePipette: () => {},
 });
 
 export const usePlace = () => useContext(PlaceContext);
@@ -40,6 +48,11 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [cursorPosition, setCursorPosition] = useState({ x: -1, y: -1 });
   const [isMouseOnScreen, setIsMouseOnScreen] = useState(false);
+  const [hoveredPixel, setHoveredPixel] = useState<{
+    x: number;
+    y: number;
+    color: string;
+  } | null>(null);
 
   const { grid, setGrid, isLoading } = useGridData();
 
@@ -75,6 +88,24 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
   };
+
+  const deactivatePipette = useCallback(() => {
+    setIsPipetteActive(false);
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (e.target && !(e.target as HTMLElement).closest(".pixel-grid")) {
+        deactivatePipette();
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [deactivatePipette]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -115,6 +146,9 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
     isLoading,
     cursorPosition,
     isMouseOnScreen,
+    hoveredPixel,
+    setHoveredPixel,
+    deactivatePipette,
   };
 
   return (

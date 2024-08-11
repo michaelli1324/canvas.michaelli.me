@@ -13,7 +13,7 @@ export const useGridData = () => {
   const [grid, setGrid] = useState(
     Array(ROWS)
       .fill(null)
-      .map(() => Array(COLS).fill(""))
+      .map(() => Array(COLS).fill("#ffffff"))
   );
   const [isLoading, setIsLoading] = useState(true);
 

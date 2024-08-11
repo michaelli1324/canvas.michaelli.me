@@ -2,7 +2,7 @@ import React from "react";
 import { usePlace } from "../contexts/PlaceContext";
 
 const ColorIndicator: React.FC = () => {
-  const { selectedColor, cursorPosition, isMouseOnScreen, isPipetteActive } =
+  const { cursorPosition, isMouseOnScreen, isPipetteActive, hoveredPixel } =
     usePlace();
 
   if (!isMouseOnScreen || isPipetteActive) {
@@ -10,14 +10,25 @@ const ColorIndicator: React.FC = () => {
   }
 
   return (
-    <div
-      className='color-indicator'
-      style={{
-        left: cursorPosition.x + 10,
-        top: cursorPosition.y + 10,
-        backgroundColor: selectedColor,
-      }}
-    />
+    hoveredPixel && (
+      <div
+        className='color-indicator-container'
+        style={{
+          left: cursorPosition.x + 10,
+          top: cursorPosition.y + 10,
+        }}
+      >
+        <div
+          style={{
+            color: "#000",
+            left: cursorPosition.x + 20,
+            top: cursorPosition.y + 10,
+          }}
+        >
+          X: {hoveredPixel.x}, Y: {hoveredPixel.y}
+        </div>
+      </div>
+    )
   );
 };
 
