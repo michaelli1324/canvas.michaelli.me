@@ -6,6 +6,7 @@ import ColorPicker from "./components/ColorPicker";
 import ZoomControls from "./components/ZoomControls";
 import LoadingScreen from "./components/LoadingScreen";
 import { PlaceProvider, usePlace } from "./contexts/PlaceContext";
+import ColorIndicator from "./components/ColorIndicator";
 
 const PixelApp: React.FC = () => {
   const pixelGridRef = useRef<PixelGridRef>(null);
@@ -28,6 +29,7 @@ const PixelApp: React.FC = () => {
         onZoomOut={handleZoomOut}
         onResetZoom={handleResetZoom}
       />
+      <ColorIndicator />
     </div>
   );
 };

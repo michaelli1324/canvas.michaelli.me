@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { useSupabaseSubscription } from "../hooks/useSupabaseSubscription";
 import { useGridData } from "../hooks/useGridData";
 
@@ -13,6 +13,8 @@ type PlaceContextType = {
   setZoomLevel: (level: number) => void;
   handlePixelClick: (x: number, y: number) => void;
   isLoading: boolean;
+  cursorPosition: { x: number; y: number };
+  isMouseOnScreen: boolean;
 };
 
 const PlaceContext = createContext<PlaceContextType>({
@@ -26,6 +28,8 @@ const PlaceContext = createContext<PlaceContextType>({
   setZoomLevel: () => {},
   handlePixelClick: () => {},
   isLoading: true,
+  cursorPosition: { x: -1, y: -1 },
+  isMouseOnScreen: false,
 });
 
 export const usePlace = () => useContext(PlaceContext);
@@ -34,6 +38,8 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [isPipetteActive, setIsPipetteActive] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [cursorPosition, setCursorPosition] = useState({ x: -1, y: -1 });
+  const [isMouseOnScreen, setIsMouseOnScreen] = useState(false);
 
   const { grid, setGrid, isLoading } = useGridData();
 
@@ -70,6 +76,32 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseEnter = () => {
+      setIsMouseOnScreen(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsMouseOnScreen(false);
+    };
+
+    // Add event listeners
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseenter", handleMouseEnter);
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    // Remove event listeners on cleanup
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
   const value = {
     grid,
     setGrid,
@@ -81,6 +113,8 @@ export const PlaceProvider = ({ children }: { children: React.ReactNode }) => {
     setZoomLevel,
     handlePixelClick,
     isLoading,
+    cursorPosition,
+    isMouseOnScreen,
   };
 
   return (
