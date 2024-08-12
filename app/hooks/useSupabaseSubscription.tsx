@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../types/pixel.types";
+import { WHITE } from "../lib/colors";
 
 const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,7 +20,7 @@ export const useSupabaseSubscription = (
         if (eventType === "INSERT" || eventType === "UPDATE") {
           newGrid[newPixel.y][newPixel.x] = newPixel.color;
         } else if (eventType === "DELETE") {
-          newGrid[oldPixel.y][oldPixel.x] = "";
+          newGrid[oldPixel.y][oldPixel.x] = WHITE;
         }
         return newGrid;
       });

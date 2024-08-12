@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { WHITE } from "../lib/colors";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,7 +14,7 @@ export const useGridData = () => {
   const [grid, setGrid] = useState(
     Array(ROWS)
       .fill(null)
-      .map(() => Array(COLS).fill("#ffffff"))
+      .map(() => Array(COLS).fill(WHITE))
   );
   const [isLoading, setIsLoading] = useState(true);
 
